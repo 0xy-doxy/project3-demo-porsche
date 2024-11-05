@@ -13,23 +13,26 @@ function Login() {
     const navigate = useNavigate()
     
     const handleLogin = (e) => {
-      e.preventDefault();
-      axios.post("https://demo-porsche-backend.onrender.com/login", { email, password }, { withCredentials: true })
-          .then(result => {
-              if (result.data === "Success") {
-                  axios.get('https://demo-porsche-backend.onrender.com/user', { withCredentials: true })
-                      .then(response => {
-                          if (response.data.user) {
-                            setIsLoggedIn(true);
-                            navigate("/body", { state: { user: response.data.user } });
-                          }
-                      });
-              } else {
-                  alert("Login failed");
-              }
+  e.preventDefault();
+  axios.post("https://demo-porsche-backend.onrender.com/login", { email, password }, { withCredentials: true })
+    .then(result => {
+      if (result.data === "Success") {
+        axios.get('https://demo-porsche-backend.onrender.com/user', { withCredentials: true })
+          .then(response => {
+            if (response.data.user) {
+              setIsLoggedIn(true);
+              navigate("/body", { state: { user: response.data.user } });
+            } else {
+              alert("Failed to retrieve user data.");
+            }
           })
-          .catch(err => console.log(err));
-  };
+          .catch(err => console.error("Error fetching user data:", err));
+      } else {
+        alert("Login failed");
+      }
+    })
+    .catch(err => console.error("Login request failed:", err));
+};
 
 
   return (
