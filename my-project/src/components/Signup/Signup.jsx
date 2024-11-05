@@ -11,7 +11,7 @@ const Signup = () => {
 
     const handleSignup=(e)=>{
       e.preventDefault()
-      axios.post("http://localhost:3001/signup", {name, email, password})
+      axios.post("https://demo-porsche-backend.onrender.com/signup", {name, email, password})
       .then(result => {
           if(result.status==200){
             console.log("User created successfully");
