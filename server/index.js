@@ -12,10 +12,23 @@ dotenv.config()
 const app = express()
 app.use(express.json())
 
+const cors = require('cors');
+
+const allowedOrigins = ['https://demo-porsche-frontend.onrender.com', 'http://localhost:5173']; // Add your frontend origin here
+
 app.use(cors({
-      origin:process.env.FRONTEND_URL,
-      credentials:true
-}))
+  origin: function (origin, callback) {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // If you are using cookies with your requests
+}));
+
+app.options('*', cors()); // This will handle preflight requests for all routes
+
 
 
 mongoose.connect(process.env.MONGO_URL)
