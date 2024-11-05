@@ -13,18 +13,10 @@ const app = express()
 app.use(express.json())
 
 app.use(cors({
-       origin: 'https://demo-porsche-frontend.onrender.com', // Allow requests from your frontend
-       methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
-       allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-    credentials:true
+      origin:process.env.FRONTEND_URL,
+      credentials:true
 }))
 
-app.use((req, res, next) => {
-     res.header('Access-Control-Allow-Origin', 'https://demo-porsche-frontend.onrender.com'); // Replace with your frontend's URL
-     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-     next();
-   });
 
 mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log("connected to mongodb"))
