@@ -52,7 +52,7 @@ app.use(session({
     cookie: {
         maxAge: 24 * 60 * 60 * 1000,
         httpOnly: true,
-        secure: true, // Only send cookies over HTTPS in production
+        secure: process.env.NODE_ENV === 'production', // Only send cookies over HTTPS in production
         sameSite: 'none', // Required for cross-site cookie sharing
     }
 }));
