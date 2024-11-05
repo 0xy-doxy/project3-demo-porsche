@@ -90,6 +90,7 @@ app.post("/login", async (req, res) => {
             const passwordMatch = await bcrypt.compare(password, user.password);
             if (passwordMatch) {
                 req.session.user = { id: user._id, name: user.name, email: user.email };
+                console.log("Session after login:", req.session); // Log session data here
                  res.json("Success");
                 console.log(email);
                
