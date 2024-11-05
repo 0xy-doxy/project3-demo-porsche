@@ -23,8 +23,10 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true, // If you are using cookies with your requests
+  credentials: true, // Required for cookies
+  methods: ['GET', 'POST', 'OPTIONS'], // Specify allowed HTTP methods
 }));
+
 
 app.options('*', cors()); // This will handle preflight requests for all routes
 
@@ -41,14 +43,19 @@ app.listen(process.env.PORT,()=>{
 
 
 app.use(session({
-    secret:process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({
         mongoUrl: process.env.MONGO_URL
     }),
-    cookie: {maxAge : 24 * 60 * 60 * 1000}
-}))
+    cookie: {
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // Only send cookies over HTTPS in production
+        sameSite: 'none', // Required for cross-site cookie sharing
+    }
+}));
 
 
 app.post("/signup", async(req, res) => {
@@ -114,9 +121,11 @@ app.post("/logout", (req, res) => {
 });
 
 app.get('/user', (req, res) => {
+    console.log("Session data in /user route:", req.session);
     if (req.session.user) {
         res.json({ user: req.session.user });
     } else {
         res.status(401).json("Not authenticated");
     }
 });
+
