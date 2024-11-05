@@ -13,7 +13,9 @@ const app = express()
 app.use(express.json())
 
 app.use(cors({
-    origin:process.env.FRONTEND_URL,
+       origin: 'https://demo-porsche-frontend.onrender.com', // Allow requests from your frontend
+       methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
+       allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
     credentials:true
 }))
 
